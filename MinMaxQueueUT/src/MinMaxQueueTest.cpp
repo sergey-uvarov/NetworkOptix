@@ -240,20 +240,20 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypePopEmptyQueue)
 
 TEST_F(IntMinMaxQueueTestFixture, IntMinMaxEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.min(), ".*");
-    EXPECT_DEATH(m_queue.max(), ".*");
+    ASSERT_DEATH(m_queue.min(), ".*");
+    ASSERT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(StringMinMaxQueueTestFixture, StringMinMaxEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.min(), ".*");
-    EXPECT_DEATH(m_queue.max(), ".*");
+    ASSERT_DEATH(m_queue.min(), ".*");
+    ASSERT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.min(), ".*");
-    EXPECT_DEATH(m_queue.max(), ".*");
+    ASSERT_DEATH(m_queue.min(), ".*");
+    ASSERT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(IntMinMaxQueueTestFixture, IntPushTimeComplexity)
