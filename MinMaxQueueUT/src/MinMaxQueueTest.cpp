@@ -29,6 +29,31 @@
     EXPECT_EQ(m_queue.max(), testValue2);  \
 
 
+#define PushPopMinMaxTest(val, val2, val3, val4) \
+    auto testValue = val;                          \
+    auto testValue2 = val2;                         \
+    auto testValue3 = val3;                         \
+    auto testValue4 = val4;                         \
+                                                 \
+    m_queue.push(testValue);                     \
+    m_queue.push(testValue2);                    \
+    m_queue.push(testValue3);                    \
+    m_queue.push(testValue4);                    \
+                                                 \
+    EXPECT_EQ(m_queue.min(), testValue);         \
+    EXPECT_EQ(m_queue.max(), testValue2);        \
+                                                 \
+    m_queue.pop();                               \
+                                                 \
+    EXPECT_EQ(m_queue.min(), testValue4);        \
+    EXPECT_EQ(m_queue.max(), testValue2);        \
+                                                 \
+    m_queue.pop();                               \
+                                                 \
+    EXPECT_EQ(m_queue.min(), testValue4);        \
+    EXPECT_EQ(m_queue.max(), testValue3);        \
+
+
 #define MultithreadPush(val)                                          \
     const auto testValue = val;                                       \
     std::thread t1([this, testValue](){ m_queue.push(testValue); });  \
@@ -191,6 +216,21 @@ TEST_F(StringMinMaxQueueTestFixture, StringMinMaxTest)
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxTest)
 {
     MinMaxTest(A(0), A(1))
+}
+
+TEST_F(IntMinMaxQueueTestFixture, IntPushPopMinMaxTest)
+{
+    PushPopMinMaxTest(0, 3, 2, 1)
+}
+
+TEST_F(StringMinMaxQueueTestFixture, StringPushPopMinMaxTest)
+{
+    PushPopMinMaxTest(std::string("a"), std::string("d"), std::string("c"), std::string("b"))
+}
+
+TEST_F(UserTypeMinMaxQueueTestFixture, UserTypePushPopMinMaxTest)
+{
+    PushPopMinMaxTest(A(0), A(3), A(2), A(1))
 }
 
 TEST_F(IntMinMaxQueueTestFixture, IntMultithreadPush)
