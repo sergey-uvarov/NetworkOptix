@@ -20,6 +20,10 @@ public:
     T pop()
     {
         std::lock_guard<std::mutex> lg(m_mutex);
+
+        if (m_queue.empty())
+            m_queue.pop(); // Cause segmentation fault as an expected behavior of STL container
+
         auto result = std::move(m_queue.front());
         m_queue.pop();
         return result;
@@ -27,12 +31,12 @@ public:
 
     T min() const
     {
-        return *m_min;
+        return *m_min; // Will cause segmentation fault in case of an empty queue as we have no value to return
     }
 
     T max() const
     {
-        return *m_max;
+        return *m_max; // Will cause segmentation fault in case of an empty queue as we have no value to return
     }
 
 private:
