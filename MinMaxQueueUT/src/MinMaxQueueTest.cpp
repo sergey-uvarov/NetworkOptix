@@ -225,35 +225,35 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMultithreadPop)
 
 TEST_F(IntMinMaxQueueTestFixture, IntPopEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.pop(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.pop(), ".*");
 }
 
 TEST_F(StringMinMaxQueueTestFixture, StringPopEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.pop(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.pop(), ".*");
 }
 
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypePopEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.pop(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.pop(), ".*");
 }
 
 TEST_F(IntMinMaxQueueTestFixture, IntMinMaxEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.min(), ::testing::KilledBySignal(SIGSEGV), ".*"); \
-    ASSERT_EXIT(m_queue.max(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.min(), ".*");
+    EXPECT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(StringMinMaxQueueTestFixture, StringMinMaxEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.min(), ::testing::KilledBySignal(SIGSEGV), ".*"); \
-    ASSERT_EXIT(m_queue.max(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.min(), ".*");
+    EXPECT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxEmptyQueue)
 {
-    ASSERT_EXIT(m_queue.min(), ::testing::KilledBySignal(SIGSEGV), ".*"); \
-    ASSERT_EXIT(m_queue.max(), ::testing::KilledBySignal(SIGSEGV), ".*");
+    EXPECT_DEATH(m_queue.min(), ".*");
+    EXPECT_DEATH(m_queue.max(), ".*");
 }
 
 TEST_F(IntMinMaxQueueTestFixture, IntPushTimeComplexity)
