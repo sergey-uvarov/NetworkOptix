@@ -225,34 +225,46 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMultithreadPop)
 
 TEST_F(IntMinMaxQueueTestFixture, IntPopEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.pop(), ".*");
+    ASSERT_DEATH(m_queue.pop(), ".*");
 }
 
 TEST_F(StringMinMaxQueueTestFixture, StringPopEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.pop(), ".*");
+    ASSERT_DEATH(m_queue.pop(), ".*");
 }
 
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypePopEmptyQueue)
 {
-    EXPECT_DEATH(m_queue.pop(), ".*");
+    ASSERT_DEATH(m_queue.pop(), ".*");
 }
 
-TEST_F(IntMinMaxQueueTestFixture, IntMinMaxEmptyQueue)
+TEST_F(IntMinMaxQueueTestFixture, IntMinEmptyQueue)
 {
     ASSERT_DEATH(m_queue.min(), ".*");
+}
+
+TEST_F(IntMinMaxQueueTestFixture, IntMaxEmptyQueue)
+{
     ASSERT_DEATH(m_queue.max(), ".*");
 }
 
-TEST_F(StringMinMaxQueueTestFixture, StringMinMaxEmptyQueue)
+TEST_F(StringMinMaxQueueTestFixture, StringMinEmptyQueue)
 {
     ASSERT_DEATH(m_queue.min(), ".*");
+}
+
+TEST_F(StringMinMaxQueueTestFixture, StringMaxEmptyQueue)
+{
     ASSERT_DEATH(m_queue.max(), ".*");
 }
 
-TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxEmptyQueue)
+TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinEmptyQueue)
 {
     ASSERT_DEATH(m_queue.min(), ".*");
+}
+
+TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMaxEmptyQueue)
+{
     ASSERT_DEATH(m_queue.max(), ".*");
 }
 
