@@ -6,4 +6,8 @@ To build MinMaxQueue projects on Linux:
 If it's not so, recheck that you have CMake and a C++ compiler installed and retry from point 1.
 5. To run unit tests and ensure everything works as expected, just run the following command (from the "bin" directory): "./MinMaxQueueUT".
 This will run all the unit tests and you should see all them PASSED.
-6. To run the app, which uses the lib functionality, run "./MinMaxQueue".
+
+Requirements:
+
+gcc 9.3.0+
+clang 12.0+

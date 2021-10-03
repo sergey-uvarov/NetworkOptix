@@ -367,3 +367,203 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMaxTimeComplexity)
 {
     MaxTimeComplexity(A(0))
 }
+
+TEST_F(IntMinMaxQueueTestFixture, IntMinMaxComplexTest)
+{
+    m_queue.push(2);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    m_queue.push(4);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 4);
+
+    m_queue.push(4);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 4);
+
+    m_queue.push(3);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 4);
+
+    m_queue.push(5);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(0);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(1);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(2);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 2);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 4);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 4);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 3);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 5);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    EXPECT_EQ(m_queue.pop(), 0);
+
+    EXPECT_EQ(m_queue.min(), 1);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    EXPECT_EQ(m_queue.pop(), 1);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    EXPECT_EQ(m_queue.pop(), 2);
+}
+
+TEST_F(IntMinMaxQueueTestFixture, IntMinMaxAscendingTest)
+{
+    m_queue.push(0);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 0);
+
+    m_queue.push(1);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 1);
+
+    m_queue.push(2);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    m_queue.push(3);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 3);
+
+    m_queue.push(4);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 4);
+
+    m_queue.push(5);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 0);
+
+    EXPECT_EQ(m_queue.min(), 1);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 1);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 2);
+
+    EXPECT_EQ(m_queue.min(), 3);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 3);
+
+    EXPECT_EQ(m_queue.min(), 4);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 4);
+
+    EXPECT_EQ(m_queue.min(), 5);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 5);
+}
+
+TEST_F(IntMinMaxQueueTestFixture, IntMinMaxDescendingTest)
+{
+    m_queue.push(5);
+
+    EXPECT_EQ(m_queue.min(), 5);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(4);
+
+    EXPECT_EQ(m_queue.min(), 4);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(3);
+
+    EXPECT_EQ(m_queue.min(), 3);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(2);
+
+    EXPECT_EQ(m_queue.min(), 2);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(1);
+
+    EXPECT_EQ(m_queue.min(), 1);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    m_queue.push(0);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 5);
+
+    EXPECT_EQ(m_queue.pop(), 5);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 4);
+
+    EXPECT_EQ(m_queue.pop(), 4);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 3);
+
+    EXPECT_EQ(m_queue.pop(), 3);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 2);
+
+    EXPECT_EQ(m_queue.pop(), 2);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 1);
+
+    EXPECT_EQ(m_queue.pop(), 1);
+
+    EXPECT_EQ(m_queue.min(), 0);
+    EXPECT_EQ(m_queue.max(), 0);
+
+    EXPECT_EQ(m_queue.pop(), 0);
+}
