@@ -8,6 +8,5 @@ If it's not so, recheck that you have CMake and a C++ compiler installed and ret
 This will run all the unit tests and you should see all them PASSED.
 
 Requirements:
-
 gcc 9.3.0+
 clang 12.0+
