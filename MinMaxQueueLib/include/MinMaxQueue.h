@@ -15,9 +15,9 @@ class MinMaxQueue
         , localMax(val)
         {}
 
-        /*std::atomic<*/T/*>*/ value;
-        /*std::atomic<*/T/*>*/ localMin;
-        /*std::atomic<*/T/*>*/ localMax;
+        T value;
+        T localMin;
+        T localMax;
 
         bool operator< (const Node &other) const
         {
@@ -110,14 +110,16 @@ public:
         return *m_max; // Will cause segmentation fault in case of an empty queue as we have no value to return
     }
 
+    int size() const
+    {
+        std::lock_guard<std::mutex> lg(m_mutex);
+        return m_queue.size();
+    }
+
 private:
-    /*std::atomic<*/T */*>*/ m_min = nullptr;
-    /*std::atomic<*/T */*>*/ m_max = nullptr;
+    std::atomic<T *> m_min = nullptr;
+    std::atomic<T *> m_max = nullptr;
 
     std::deque<Node> m_queue;
-    std::mutex m_mutex;
-
-    friend class IntMinMaxQueueTestFixture;
-    friend class StringMinMaxQueueTestFixture;
-    friend class UserTypeMinMaxQueueTestFixture;
+    mutable std::mutex m_mutex;
 };

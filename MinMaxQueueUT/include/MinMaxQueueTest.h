@@ -2,29 +2,30 @@
 
 #include "MinMaxQueue.h"
 
-class IntMinMaxQueueTestFixture : public ::testing::Test
+template<class T>
+class MinMaxQueueTestFixture : public ::testing::Test
 {
 public:
-    void SetUp() final {}
-    void TearDown() final {}
 
-    int queueSize() { return m_queue.m_queue.size(); }
-
-protected:
-    MinMaxQueue<int> m_queue;
-};
-
-class StringMinMaxQueueTestFixture : public ::testing::Test
-{
-public:
-    void SetUp() final {}
-    void TearDown() final {}
-
-    int queueSize() { return m_queue.m_queue.size(); }
+    void PushTest(const T &value);
+    void PopTest(const T &value);
+    void MinMaxTest(const T &value, const T &value2);
+    void MinMaxComplexTest(std::vector<T> values);
+    void MultithreadPushTest(const T &value);
+    void MultithreadPopTest(const T &value);
+    void PopEmptyQueueTest();
+    void MinEmptyQueueTest();
+    void MaxEmptyQueueTest();
 
 protected:
-    MinMaxQueue<std::string> m_queue;
+    MinMaxQueue<T> m_queue;
 };
+
+class IntMinMaxQueueTestFixture : public MinMaxQueueTestFixture<int>
+{};
+
+class StringMinMaxQueueTestFixture : public MinMaxQueueTestFixture<std::string>
+{};
 
 struct A
 {
@@ -34,6 +35,7 @@ struct A
     {
         return m_value < other.m_value;
     }
+
     bool operator> (const A &other) const
     {
         return m_value > other.m_value;
@@ -47,14 +49,5 @@ struct A
     int m_value = 0;
 };
 
-class UserTypeMinMaxQueueTestFixture : public ::testing::Test
-{
-public:
-    void SetUp() final {}
-    void TearDown() final {}
-
-    int queueSize() { return m_queue.m_queue.size(); }
-
-protected:
-    MinMaxQueue<A> m_queue;
-};
+class UserTypeMinMaxQueueTestFixture : public MinMaxQueueTestFixture<A>
+{};
