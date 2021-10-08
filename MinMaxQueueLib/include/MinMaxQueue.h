@@ -1,80 +1,21 @@
-#include <mutex>
-#include <deque>
 #include <atomic>
-
+#include <deque>
 #include <iostream>
+#include <list>
+#include <mutex>
 
 template<class T>
 class MinMaxQueue
 {
-    struct Node
-    {
-        Node(const T &val)
-        : value(val)
-        , localMin(val)
-        , localMax(val)
-        {}
-
-        T value;
-        T localMin;
-        T localMax;
-
-        bool operator< (const Node &other) const
-        {
-            return value < other.value;
-        }
-        bool operator> (const Node &other) const
-        {
-            return value > other.value;
-        }
-
-        bool operator== (const Node &other) const
-        {
-            return value == other.value;
-        }
-    };
-
 public:
     void push(const T &value)
     {
         std::lock_guard<std::mutex> lg(m_mutex);
 
-        auto node = Node(value);
+        m_queue.push_back(value);
 
-        m_queue.push_back(node);
-
-        auto minUpdated = false;
-        auto maxUpdated = false;
-
-        if (!m_max || m_queue.back().value > *m_max)
-        {
-            m_max = &m_queue.back().value;
-            maxUpdated = true;
-        }
-        if (!m_min || m_queue.back().value < *m_min)
-        {
-            m_min = &m_queue.back().value;
-            minUpdated = true;
-        }
-
-        if (!minUpdated && !maxUpdated)
-        {
-            auto it = m_queue.end() - 2;
-
-            while (node.value > it->localMax)
-            {
-                it->localMax = node.value;
-                --it;
-            }
-
-            it = m_queue.end() - 2;
-
-            while (node.value < it->localMin)
-            {
-                it->localMin = node.value;
-                --it;
-            }
-        }
+        updateMaxExtrs(value);
+        updateMinExtrs(value);
     }
 
     T pop()
@@ -84,30 +25,35 @@ public:
         if (m_queue.empty())
             m_queue.pop_front(); // Cause segmentation fault as an expected behavior of STL container
 
-        auto minValue = min();
-        auto maxValue = max();
-
-        auto result = std::move(m_queue.front().value);
+        auto result = std::move(m_queue.front());
 
         m_queue.pop_front();
 
-        if (result == minValue)
-            m_min = !m_queue.empty() ? &m_queue.front().localMin : nullptr;
+        if (m_queue.empty())
+        {
+            m_minExtrs.clear();
+            m_maxExtrs.clear();
 
-        if (result == maxValue)
-            m_max = !m_queue.empty() ? &m_queue.front().localMax : nullptr;
+            return result;
+        }
+
+        if (result == min())
+            m_minExtrs.pop_front();
+
+        if (result == max())
+            m_maxExtrs.pop_front();
 
         return result;
     }
 
     T min() const
     {
-        return *m_min; // Will cause segmentation fault in case of an empty queue as we have no value to return
+        return m_minExtrs.front(); // Undefined behavior in case of an empty list
     }
 
     T max() const
     {
-        return *m_max; // Will cause segmentation fault in case of an empty queue as we have no value to return
+        return m_maxExtrs.front(); // Undefined behavior in case of an empty list
     }
 
     int size() const
@@ -117,9 +63,66 @@ public:
     }
 
 private:
-    std::atomic<T *> m_min = nullptr;
-    std::atomic<T *> m_max = nullptr;
+    void updateMaxExtrs(const T &value)
+    {
+        if (m_maxExtrs.empty())
+        {
+            m_maxExtrs.push_back(value);
+            return;
+        }
+            
+        if (value > m_maxExtrs.front())
+        {
+            m_maxExtrs.clear();
+            m_maxExtrs.push_back(value);
+            return;
+        }
 
-    std::deque<Node> m_queue;
+        if (value < m_maxExtrs.back())
+        {
+            m_maxExtrs.push_back(value);
+        }
+        else
+        {
+            auto it = m_maxExtrs.end();
+            while (it != m_maxExtrs.begin() && *(--it) < value)
+                m_maxExtrs.erase(it);
+            m_maxExtrs.push_back(value);
+        }
+    }
+
+    void updateMinExtrs(const T &value)
+    {
+        if (m_minExtrs.empty())
+        {
+            m_minExtrs.push_back(value);
+            return;
+        }
+            
+        if (value < m_minExtrs.front())
+        {
+            m_minExtrs.clear();
+            m_minExtrs.push_back(value);
+            return;
+        }
+
+        if (value > m_minExtrs.back())
+        {
+            m_minExtrs.push_back(value);
+        }
+        else
+        {
+            auto it = m_minExtrs.end();
+            while (it != m_minExtrs.begin() && *(--it) > value)
+                m_minExtrs.erase(it);
+            m_minExtrs.push_back(value);
+        }        
+    }
+
+private:
+    std::list<T> m_maxExtrs;
+    std::list<T> m_minExtrs;
+
+    std::deque<T> m_queue;
     mutable std::mutex m_mutex;
 };

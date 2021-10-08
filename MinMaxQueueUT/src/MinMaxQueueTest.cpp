@@ -122,20 +122,6 @@ void MinMaxQueueTestFixture<T>::PopEmptyQueueTest()
 }
 
 
-template<class T>
-void MinMaxQueueTestFixture<T>::MinEmptyQueueTest()
-{
-    ASSERT_DEATH(m_queue.min(), ".*");
-}
-
-
-template<class T>
-void MinMaxQueueTestFixture<T>::MaxEmptyQueueTest()
-{
-    ASSERT_DEATH(m_queue.max(), ".*");
-}
-
-
 TEST_F(IntMinMaxQueueTestFixture, IntPushTest)
 {
     PushTest(0);
@@ -244,42 +230,6 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypePopEmptyQueueTest)
 }
 
 
-TEST_F(IntMinMaxQueueTestFixture, IntMinEmptyQueue)
-{
-    MinEmptyQueueTest();
-}
-
-
-TEST_F(IntMinMaxQueueTestFixture, IntMaxEmptyQueue)
-{
-    MinEmptyQueueTest();
-}
-
-
-TEST_F(StringMinMaxQueueTestFixture, StringMinEmptyQueue)
-{
-    MinEmptyQueueTest();
-}
-
-
-TEST_F(StringMinMaxQueueTestFixture, StringMaxEmptyQueue)
-{
-    MaxEmptyQueueTest();
-}
-
-
-TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinEmptyQueue)
-{
-    MaxEmptyQueueTest();
-}
-
-
-TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMaxEmptyQueue)
-{
-    MaxEmptyQueueTest();
-}
-
-
 TEST_F(IntMinMaxQueueTestFixture, IntMinMaxComplexTest)
 {
     MinMaxComplexTest({ 2, 4, 4, 3, 5, 0, 1, 2 });
@@ -331,4 +281,16 @@ TEST_F(StringMinMaxQueueTestFixture, StringMinMaxDescendingTest)
 TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxDescendingTest)
 {
     MinMaxComplexTest({ A(5), A(4), A(3), A(2), A(1), A(0) });
+}
+
+
+TEST_F(IntMinMaxQueueTestFixture, IntMinMaxSlopesTest)
+{
+    std::vector<int> values;
+    values.push_back(100000);
+    
+    for (auto i = 0; i <= 100000; ++i)
+        values.push_back(i);
+
+    MinMaxComplexTest(values);
 }
