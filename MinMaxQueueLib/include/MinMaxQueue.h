@@ -84,9 +84,13 @@ private:
         }
         else
         {
-            auto it = m_maxExtrs.end();
-            while (it != m_maxExtrs.begin() && *(--it) < value)
-                m_maxExtrs.erase(it);
+            while (m_maxExtrs.size() > 0)
+            {
+                auto it = --m_maxExtrs.end();
+                if (*it < value)
+                    m_maxExtrs.erase(it);
+                else break;
+            }
             m_maxExtrs.push_back(value);
         }
     }
@@ -112,9 +116,13 @@ private:
         }
         else
         {
-            auto it = m_minExtrs.end();
-            while (it != m_minExtrs.begin() && *(--it) > value)
-                m_minExtrs.erase(it);
+            while (m_minExtrs.size() > 0)
+            {
+                auto it = --m_minExtrs.end();
+                if (*it > value)
+                    m_minExtrs.erase(it);
+                else break;
+            }
             m_minExtrs.push_back(value);
         }        
     }
