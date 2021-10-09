@@ -8,9 +8,10 @@ class MinMaxQueueTestFixture : public ::testing::Test
 public:
 
     void PushTest(const T &value);
+    void PushTimeTest();
     void PopTest(const T &value);
     void MinMaxTest(const T &value, const T &value2);
-    void MinMaxComplexTest(std::vector<T> values);
+    void MinMaxComplexTest(std::list<T> values);
     void MultithreadPushTest(const T &value);
     void MultithreadPopTest(const T &value);
     void PopEmptyQueueTest();

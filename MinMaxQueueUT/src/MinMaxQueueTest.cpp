@@ -4,11 +4,38 @@
 #include <optional>
 
 
+template<typename Action>
+size_t time(const Action& action, size_t repeat = 1)
+{
+    const auto begin = std::chrono::steady_clock::now();
+    for (size_t i = 0; i < repeat; ++i) action();
+    const auto end = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+}
+
+
 template<class T>
 void MinMaxQueueTestFixture<T>::PushTest(const T &value)
 {
     m_queue.push(value);
     EXPECT_EQ(m_queue.size(), 1);
+}
+
+
+template<class T>
+void MinMaxQueueTestFixture<T>::PushTimeTest()
+{
+    MinMaxQueue<size_t> q;
+    const auto t1 = time([&] { q.push(1000000); });
+
+    size_t counter = 0;
+    const auto pushInc = [&] { q.push(++counter); };
+
+    EXPECT_GT(t1 * 20000, time(pushInc, 10000));
+    EXPECT_GT(t1 * 2, time(pushInc, 1));
+
+    EXPECT_GT(t1 * 20000, time(pushInc, 10000));
+    EXPECT_GT(t1 * 2, time(pushInc, 1));
 }
 
 
@@ -39,7 +66,7 @@ void MinMaxQueueTestFixture<T>::MinMaxTest(const T &value, const T &value2)
 
 
 template<class T>
-void MinMaxQueueTestFixture<T>::MinMaxComplexTest(std::vector<T> values)
+void MinMaxQueueTestFixture<T>::MinMaxComplexTest(std::list<T> values)
 {
     for (const auto &value: values)
     {
@@ -61,17 +88,20 @@ void MinMaxQueueTestFixture<T>::MinMaxComplexTest(std::vector<T> values)
         EXPECT_EQ(m_queue.max(), expectedMax);
     }
 
+    values.sort();
+
     while (m_queue.size() > 1)
     {
-        auto popValue = m_queue.pop();
-        
-        values.erase(values.begin());
+        auto popedValueIt = std::find(values.begin(), values.end(), m_queue.pop());
+     
+        if (popedValueIt != values.end())
+            values.erase(popedValueIt);
 
-        auto min = std::min_element(values.begin(), values.end());
-        auto max = std::max_element(values.begin(), values.end());
+        auto min = *(values.begin());
+        auto max = *(--values.end());
 
-        EXPECT_EQ(m_queue.min(), *min);
-        EXPECT_EQ(m_queue.max(), *max);
+        EXPECT_EQ(m_queue.min(), min);
+        EXPECT_EQ(m_queue.max(), max);
     }
 }
 
@@ -286,11 +316,17 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxDescendingTest)
 
 TEST_F(IntMinMaxQueueTestFixture, IntMinMaxSlopesTest)
 {
-    std::vector<int> values;
-    values.push_back(100000);
+    std::list<int> values;
+    values.push_back(1000000);
     
-    for (auto i = 0; i <= 100000; ++i)
+    for (auto i = 0; i <= 1000000; ++i)
         values.push_back(i);
 
     MinMaxComplexTest(values);
+}
+
+
+TEST_F(UserTypeMinMaxQueueTestFixture, PushTimeTest)
+{
+    PushTimeTest();
 }
