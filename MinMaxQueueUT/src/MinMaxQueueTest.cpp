@@ -314,13 +314,60 @@ TEST_F(UserTypeMinMaxQueueTestFixture, UserTypeMinMaxDescendingTest)
 }
 
 
-TEST_F(IntMinMaxQueueTestFixture, IntMinMaxSlopesTest)
+TEST_F(IntMinMaxQueueTestFixture, RandomTest)
+{
+    std::list<int> values(1000);
+
+    for (auto it = values.begin(); it != values.end(); ++it)
+        *it = std::rand();
+
+    MinMaxComplexTest(values);
+}
+
+
+TEST_F(IntMinMaxQueueTestFixture, AscendingSlopeTest)
 {
     std::list<int> values;
-    values.push_back(1000000);
+    values.push_back(1000);
     
-    for (auto i = 0; i <= 1000000; ++i)
+    for (auto i = 0; i <= 1000; ++i)
         values.push_back(i);
+
+    MinMaxComplexTest(values);
+}
+
+
+TEST_F(IntMinMaxQueueTestFixture, DescendingSlopeTest)
+{
+    std::list<int> values;
+    values.push_back(0);
+    
+    for (auto i = 1000; i >= 0; --i)
+        values.push_back(i);
+
+    MinMaxComplexTest(values);
+}
+
+
+TEST_F(IntMinMaxQueueTestFixture, SawTest)
+{
+    std::list<int> values;    
+    for (auto i = 0; i <= 1000; ++i)
+    {
+        values.push_back(0);
+        values.push_back(1);
+    }
+
+    MinMaxComplexTest(values);
+}
+
+
+TEST_F(IntMinMaxQueueTestFixture, EqualsTest)
+{
+    std::list<int> values;
+    
+    for (auto i = 0; i <= 1000; ++i)
+        values.push_back(0);
 
     MinMaxComplexTest(values);
 }
